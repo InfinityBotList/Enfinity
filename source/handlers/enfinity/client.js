@@ -35,7 +35,8 @@ const enfinity = new Client({
 
 module.exports = enfinity
 
-enfinity.Database = global.pool
+enfinity.db = global.pool
+enfinity.db_query = global.pool.query
 enfinity.Gateway = Discord
 enfinity.events = events
 enfinity.logger = log
