@@ -1,0 +1,55 @@
+{
+    "name": "@infinity/support-bot",
+    "description": "Support/Management Bot for Infinity Bot List",
+    "author": "Toxic Dev",
+    "version": "1.0.0",
+    "main": "source/handlers/enfinity/client.js",
+    "license": "NO LICENSE",
+    "private": true,
+
+    "scripts": {
+        "dev": "nodemon source/handlers/enfinity/client.js",
+        "format:write": "prettier -w .",
+        "format:check": "prettier -c .",
+        "prepare": "husky install",
+        "start": "node source/handlers/enfinity/client.js"
+    },
+
+    "dependencies": {
+        "@infinitybots/node-sdk": "0.0.9",
+        "chalk": "^4.1.2",
+        "dotenv": "^16.0.3",
+        "discord.js": "^14.12.1",
+        "module-alias": "^2.2.2",
+        "moment": "^2.29.4",
+        "moment-duration-format": "^2.3.2",
+        "parse-ms": "^3.0.0",
+        "pg": "^8.11.3",
+        "snekfetch": "^4.0.4"
+    },
+
+    "devDependencies": {
+        "@commitlint/cli": "^17.6.6",
+        "@commitlint/config-conventional": "^16.2.4",
+        "eslint": "^8.45.0",
+        "husky": "^8.0.3",
+        "lint-staged": "^11.0.0",
+        "nodemon": "^2.0.20"
+    },
+
+    "_moduleAliases": {
+        "@root": ".",
+        "@client": "./source/client",
+        "@database": "./source/database",
+        "@enfinity": "./source/enfinity",
+        "@handlers": "./source/handlers",
+        "@plugins": "./source/plugins",
+        "@configs": "./source/configs"
+    },
+    "lint-staged": {
+        "./**/*.{js,json}": [
+            "eslint ./src --fix",
+            "prettier -w ./src"
+        ]
+    }
+}
