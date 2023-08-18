@@ -47,9 +47,9 @@
         "@configs": "./source/configs"
     },
     "lint-staged": {
-        "./**/*.{js,json}": [
-            "eslint ./src --fix",
-            "prettier -w ./src"
+        "./source/**/*.{js,json}": [
+            "eslint --fix",
+            "prettier -w"
         ]
     }
 }

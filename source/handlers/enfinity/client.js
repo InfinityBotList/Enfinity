@@ -1,15 +1,15 @@
-require('module-alias/register');
-require('dotenv').config();
+require('module-alias/register')
+require('dotenv').config()
 
-const Discord = require('discord.js');
-const { Client, Collection, GatewayIntentBits } = require ('discord.js');
+const Discord = require('discord.js')
+const { Client, Collection, GatewayIntentBits } = require('discord.js')
 
-const { log } = require('@plugins/logger/client');
-const events = require('@handlers/events/index');
-const config = require('@configs/main.config.js');
-const perms = require('@configs/perms.config.js');
-const emojis = require('@configs/emoji.config.js');
-const presence = require('@handlers/utils/presence');
+const { log } = require('@plugins/logger/client')
+const events = require('@handlers/events/index')
+const config = require('@configs/main.config.js')
+const perms = require('@configs/perms.config.js')
+const emojis = require('@configs/emoji.config.js')
+const rpc = require('@handlers/utils/presence')
 
 const enfinity = new Client({
     intents: [
@@ -24,25 +24,26 @@ const enfinity = new Client({
         GatewayIntentBits.GuildPresences,
         GatewayIntentBits.DirectMessages,
         GatewayIntentBits.DirectMessageReactions,
-        GatewayIntentBits.DirectMessageTyping,
+        GatewayIntentBits.DirectMessageTyping
     ],
     partials: ['CHANNEL', 'REACTION', 'GUILD_MEMBER', 'MESSAGE', 'USER'],
     allowedMentions: {
         repliedUser: true,
         parse: ['roles', 'users', 'everyone']
     }
-});
+})
 
-module.exports = enfinity;
+module.exports = enfinity
 
-enfinity.Gateway = Discord;
-enfinity.events = events;
-enfinity.logger = log;
-enfinity.config = config;
-enfinity.perms = perms;
-enfinity.emojis = emojis;
-enfinity.colors = config.colors;
-enfinity.presence = presence;
+enfinity.Database = global.pool
+enfinity.Gateway = Discord
+enfinity.events = events
+enfinity.logger = log
+enfinity.config = config
+enfinity.perms = perms
+enfinity.emojis = emojis
+enfinity.colors = config.colors
+enfinity.rpc = rpc
 enfinity.logo = 'https://cdn.discordapp.com/attachments/653733403841134600/1086513475888611410/system.png'
 enfinity.footer = '© Copyright 2020 - Infinity Development'
 
@@ -52,22 +53,22 @@ enfinity.aliases = new Collection()
 enfinity.category = new Collection()
 enfinity.limits = new Map()
 
-events.loadEvents(enfinity);
-events.loadBase(enfinity);
-events.loadSlash(enfinity);
+events.loadEvents(enfinity)
+// events.loadBase(enfinity);
+// events.loadSlash(enfinity);
 
-process.on('uncaughtException', (err) => {
+process.on('uncaughtException', err => {
     log(err.stack, {
         header: 'UNCAUGHT_EXCEPTION',
         type: 'error'
     })
-});
+})
 
-process.on('unhandledRejection', (reason, promise) => {
+process.on('unhandledRejection', reason => {
     log(reason.stack, {
         header: 'UNHANDLED_REJECTION',
         type: 'error'
     })
-});
+})
 
 enfinity.login(config.client.token)
