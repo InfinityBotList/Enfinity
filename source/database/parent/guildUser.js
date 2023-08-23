@@ -14,10 +14,11 @@ module.exports = async () => {
 
         try {
             await global.pool.query(
-                `CREATE TABLE IF NOT EXISTS enfinityUser(
-                    userId TEXT NOT NULL REFERENCES users(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
-                    userName TEXT NOT NULL,
-                    cmdBlacklist BOOLEAN NOT NULL DEFAULT FALSE
+                `CREATE TABLE enfinityUser(
+                    userId TEXT NOT NULL PRIMARY KEY REFERENCES users(user_id),
+                    globalName TEXT NOT NULL,
+                    displayName TEXT NOT NULL,
+                    cmd_blacklist BOOLEAN NOT NULL DEFAULT FALSE
                 )`
             )
 

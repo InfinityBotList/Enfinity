@@ -4,6 +4,7 @@ require('dotenv').config()
 const Discord = require('discord.js')
 const { Client, Collection, GatewayIntentBits } = require('discord.js')
 
+const database = require('@database/methods/index')
 const { log } = require('@plugins/logger/client')
 const events = require('@handlers/events/index')
 const config = require('@configs/main.config.js')
@@ -35,8 +36,8 @@ const enfinity = new Client({
 
 module.exports = enfinity
 
-enfinity.db = global.pool
-enfinity.db_query = global.pool.query
+enfinity.rpc = rpc
+enfinity.db = database
 enfinity.Gateway = Discord
 enfinity.events = events
 enfinity.logger = log
@@ -44,8 +45,9 @@ enfinity.config = config
 enfinity.perms = perms
 enfinity.emojis = emojis
 enfinity.colors = config.colors
-enfinity.rpc = rpc
+enfinity.InteractionTypes = perms.InteractionTypes
 enfinity.logo = 'https://cdn.discordapp.com/attachments/653733403841134600/1086513475888611410/system.png'
+enfinity.loading = 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif'
 enfinity.footer = '© Copyright 2020 - Infinity Development'
 
 enfinity.slash = new Collection()
@@ -56,7 +58,7 @@ enfinity.limits = new Map()
 
 events.loadEvents(enfinity)
 // events.loadBase(enfinity);
-// events.loadSlash(enfinity);
+events.loadSlash(enfinity)
 
 process.on('uncaughtException', err => {
     log(err.stack, {

@@ -1,12 +1,10 @@
-const database = require('@database/methods/index')
-
 module.exports = {
     name: 'ready',
     once: true,
 
     async execute(enfinity) {
         try {
-            await database.init()
+            await enfinity.db.init()
 
             enfinity.logger('[Client]: database connection established', {
                 header: 'CLIENT_DB_STARTUP',

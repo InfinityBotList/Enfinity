@@ -22,8 +22,8 @@ module.exports = async () => {
                     action TEXT NOT NULL,
                     duration INTERVAL NOT NULL DEFAULT interval '3 months',
                     case_number INTEGER NOT NULL DEFAULT 0,
+                    level TEXT NOT NULL,
                     time TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        
                 )`
             )
 

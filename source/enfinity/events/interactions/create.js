@@ -10,7 +10,11 @@ module.exports = {
 
         if (!command) return
 
-        if (command.userPerms.includes('BOT_ADMIN') && !enfinity.perms.Admins.includes(interaction.user.id)) {
+        if (
+            !command.userPerms.includes('') &&
+            command.userPerms.includes('BOT_ADMIN') &&
+            !enfinity.perms.Admins.includes(interaction.user.id)
+        ) {
             return interaction.reply({
                 ephemeral: true,
                 embeds: [
@@ -33,7 +37,11 @@ module.exports = {
             })
         }
 
-        if (command.userPerms.includes('BOT_MANAGERS') && !enfinity.perms.Managers.includes(interaction.user.id)) {
+        if (
+            !command.userPerms.includes('') &&
+            command.userPerms.includes('BOT_MANAGERS') &&
+            !enfinity.perms.Managers.includes(interaction.user.id)
+        ) {
             return interaction.reply({
                 ephemeral: true,
                 embeds: [
@@ -56,7 +64,11 @@ module.exports = {
             })
         }
 
-        if (command.basePerms && !interaction.member.permissions.has(command.basePerms)) {
+        if (
+            command.basePerms &&
+            !command.basePerms.includes('') &&
+            !interaction.member.permissions.has(command.basePerms)
+        ) {
             return interaction.reply({
                 ephemeral: true,
                 embeds: [

@@ -3,23 +3,27 @@ const { ActivityType } = require('discord.js')
 module.exports.setClientPresence = async client => {
     const presences = [
         {
-            name: 'Help: <<help',
-            type: ActivityType.Playing
+            name: process.env.PGHOST === 'localhost' ? 'Help: <<<help' : 'Help: <<help',
+            type: ActivityType.Custom
         },
         {
-            name: 'with the Support Panel',
-            type: ActivityType.Playing
+            name: 'Playing with our support panel',
+            type: ActivityType.Custom
+        },
+        {
+            name: 'Moderating the infinity servers',
+            type: ActivityType.Custom
         }
     ]
 
-    client.user.setStatus('idle')
+    await client.user.setStatus('idle')
 
-    setInterval(function () {
+    setInterval(async function () {
         const presence = presences[Math.floor(Math.random() * presences.length)]
 
-        client.user.setActivity(presence.name, {
-            type: presence.type,
-            url: presence.url ? presence.url : ''
+        await client.user.setActivity({
+            name: presence.name,
+            type: presence.type
         })
     }, 10000)
 }

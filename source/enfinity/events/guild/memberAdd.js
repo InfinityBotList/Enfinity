@@ -1,3 +1,5 @@
+const url = require('snekfetch')
+
 module.exports = {
     name: 'guildMemberAdd',
 
@@ -202,9 +204,184 @@ module.exports = {
                 } else if (member.user.bot) {
                     await member.roles.add(botRole)
 
-                    await auditLogs.send({})
+                    const username = member.user.globalName ? member.user.globalName : member.user.username
 
-                    return sys.send({})
+                    await auditLogs.send({
+                        embeds: [
+                            new enfinity.Gateway.EmbedBuilder()
+                                .setTitle('Guild Log: new member joined')
+                                .setColor(enfinity.colors.base)
+                                .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
+                                .setDescription(`${username} has slid into the server, can they be trusted?`)
+                                .addFields(
+                                    {
+                                        name: 'User',
+                                        value: `${username}`,
+                                        inline: true
+                                    },
+                                    {
+                                        name: 'User ID',
+                                        value: `${member.user.id}`,
+                                        inline: true
+                                    },
+                                    {
+                                        name: 'Auto Roles',
+                                        value: `${staffRole}`
+                                    }
+                                )
+                                .setTimestamp()
+                                .setFooter({
+                                    text: enfinity.footer,
+                                    iconURL: enfinity.logo
+                                })
+                        ]
+                    })
+
+                    return sys.send({
+                        embeds: [
+                            new enfinity.Gateway.EmbedBuilder()
+                                .setTitle('A new member has arrived!')
+                                .setColor(enfinity.colors.base)
+                                .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
+                                .setDescription(`${username} has slid into the server, can they be trusted?`)
+                                .addFields(
+                                    {
+                                        name: 'User',
+                                        value: `${username}`,
+                                        inline: true
+                                    },
+                                    {
+                                        name: 'User ID',
+                                        value: `${member.user.id}`,
+                                        inline: true
+                                    },
+                                    {
+                                        name: 'Auto Roles',
+                                        value: `${staffRole}`,
+                                        inline: true
+                                    }
+                                )
+                                .setTimestamp()
+                                .setFooter({
+                                    text: enfinity.footer,
+                                    iconURL: enfinity.logo
+                                })
+                        ]
+                    })
+                }
+            } else if (member.guild.id === enfinity.config.guilds.test) {
+                const audits = await member.guild.cahnnels.cache.find(c => c.id === '870952646788390918')
+                const username = member.user.globalName ? member.user.globalName : member.user.username
+
+                if (!member.user.bot) {
+                    return audits.send({
+                        embeds: [
+                            new enfinity.Gateway.EmbedBuilder()
+                                .setTitle('A new user has arrived')
+                                .setColor(enfinity.colors.base)
+                                .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
+                                .setDescription(`${username} has slid into the server, can they be trusted?`)
+                                .addFields(
+                                    {
+                                        name: 'User',
+                                        value: `${username}`,
+                                        inline: true
+                                    },
+                                    {
+                                        name: 'User ID',
+                                        value: `${member.user.id}`,
+                                        inline: true
+                                    }
+                                )
+                                .setTimestamp()
+                                .setFooter({
+                                    text: enfinity.footer,
+                                    iconURL: enfinity.logo
+                                })
+                        ]
+                    })
+                } else {
+                    await url
+                        .get(`https://spider.infinitybots.gg/bots/${member.user.id}`)
+                        .then(async req => {
+                            if (req.body.type == 'pending') {
+                                const role = await member.guild.roles.cache.find('870952645811134478')
+                                const audit = await member.guild.channels.cache.find('870952646788390918')
+
+                                try {
+                                    await member.roles.add(role)
+
+                                    return audit.send({
+                                        embeds: [
+                                            new enfinity.Gateway.EmbedBuilder()
+                                                .setTitle('A new bot has arrived')
+                                                .setColor(enfinity.colors.base)
+                                                .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
+                                                .setDescription(
+                                                    `It appears this bot is currently in queue so i have automatically applied the ${role} role`
+                                                )
+                                                .setTimestamp()
+                                                .setFooter({
+                                                    text: enfinity.footer,
+                                                    iconURL: enfinity.logo
+                                                })
+                                        ]
+                                    })
+                                } catch (e) {
+                                    await enfinity.logger(
+                                        'Whoops, something went wrong here. Please check the error below for details',
+                                        {
+                                            header: 'CLIENT_GUILD_MEMBER_ADD',
+                                            type: 'warning'
+                                        }
+                                    )
+
+                                    return enfinity.logger(e.stack, {
+                                        header: 'CLIENT_GUILD_MEMBER_ADD',
+                                        type: 'error'
+                                    })
+                                }
+                            } else {
+                                const audit = await member.guild.channels.cache.find('870952646788390918')
+
+                                return audit.send({
+                                    embeds: [
+                                        new enfinity.Gateway.EmbedBuilder()
+                                            .setTitle('A new bot has arrived')
+                                            .setColor(enfinity.colors.base)
+                                            .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
+                                            .setDescription(
+                                                'I was unable to locate this bot in our queue. Please make sure it is meant to be here!'
+                                            )
+                                            .setTimestamp()
+                                            .setFooter({
+                                                text: enfinity.footer,
+                                                iconURL: enfinity.logo
+                                            })
+                                    ]
+                                })
+                            }
+                        })
+                        .catch(async () => {
+                            const audit = await member.guild.channels.cache.find('870952646788390918')
+
+                            return audit.send({
+                                embeds: [
+                                    new enfinity.Gateway.EmbedBuilder()
+                                        .setTitle('A new bot has arrived')
+                                        .setColor(enfinity.colors.base)
+                                        .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
+                                        .setDescription(
+                                            'I was unable to locate this bot in our queue. Please make sure it is meant to be here!'
+                                        )
+                                        .setTimestamp()
+                                        .setFooter({
+                                            text: enfinity.footer,
+                                            iconURL: enfinity.logo
+                                        })
+                                ]
+                            })
+                        })
                 }
             }
         } catch (e) {

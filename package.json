@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "main": "source/handlers/enfinity/client.js",
     "license": "NO LICENSE",
-    "private": true,
+    "private": false,
 
     "scripts": {
         "dev": "nodemon source/handlers/enfinity/client.js",
@@ -16,10 +16,13 @@
     },
 
     "dependencies": {
-        "@infinitybots/node-sdk": "0.0.9",
+        "@infinitylist/spider": "~0.1.7-alpha.2",
+        "@infinitylist/ipm": "0.1.6",
+        "@infinitylist/client": "0.1.6",
+        "@infinitylist/sdk": "^0.1.7-alpha.2",
         "chalk": "^4.1.2",
         "dotenv": "^16.0.3",
-        "discord.js": "^14.12.1",
+        "discord.js": "^14.13.0",
         "module-alias": "^2.2.2",
         "moment": "^2.29.4",
         "moment-duration-format": "^2.3.2",

@@ -15,6 +15,11 @@ module.exports = {
         '707385680279633970',
         '303278996932526084'
     ],
+    Layout: {
+        Admin: 'BOT_ADMIN',
+        Manager: 'BOT_MANAGER',
+        Moderator: 'BOT_MODERATOR'
+    },
     InteractionTypes: {
         SUB_COMMAND: 1,
         SUB_COMMAND_GROUP: 2,

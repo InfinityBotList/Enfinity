@@ -1,5 +1,17 @@
 module.exports = {
     smile: '😀',
     smile2: '😄',
-    grin: '😁'
+    grin: '😁',
+    author: '👨‍💻',
+    tags: '🔖',
+    slug: '🔗',
+    desc: '💬',
+    date: '🕐',
+    draft: '📥',
+    status: {
+        online: '🟢',
+        offline: '⚫',
+        idle: '🟡',
+        dnd: '🔴'
+    }
 }
