@@ -1,3 +1,12 @@
 module.exports = async ({ userId }) => {
-    await global.pool.query(`SELECT * FROM enfinityUser WHERE userId='${userId}'`)
+    const res = await global.pool.query({
+	text: 'SELECT * FROM enfinityUser WHERE userId = $1',
+	values: [userId],
+    })
+
+    if(res?.rows?.length == 0) {
+	return null
+    }
+
+    return res.rows[0]
 }

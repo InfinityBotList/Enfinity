@@ -10,7 +10,6 @@ module.exports = {
             userId: enfinity.interaction.user.id
         })
 
-        if (!user) {
             await enfinity.interaction.reply({
                 embeds: [
                     new enfinity.Gateway.EmbedBuilder()
@@ -26,12 +25,13 @@ module.exports = {
                 ]
             })
 
+        if (!user) {
             await enfinity.db.enfinityUser
                 .upsert({
                     userId: `${enfinity.interaction.user.id}`,
                     globalName: `${enfinity.interaction.user.globalName}`,
                     displayName: `${enfinity.interaction.user.displayName}`,
-                    cmd_blacklist: false
+                    cmdBlacklist: false
                 })
                 .then(async () => {
                     await enfinity.interaction.editReply({
@@ -88,7 +88,7 @@ module.exports = {
                         })
                     }, 8000)
                 })
-        } else if (user) {
+        } else {
             await enfinity.interaction.editReply({
                 embeds: [
                     new enfinity.Gateway.EmbedBuilder()
@@ -106,12 +106,13 @@ module.exports = {
 
             await enfinity.db.enfinityUser
                 .upsert({
-                    userId: enfinity.interaction.user.id,
-                    globalName: enfinity.interaction.user.globalName,
-                    displayName: enfinity.interaction.user.displayName,
-                    cmd_blacklist: user.cmd_blacklist
+                    userId: `${enfinity.interaction.user.id}`,
+                    globalName: `${enfinity.interaction.user.globalName}`,
+                    displayName: `${enfinity.interaction.user.displayName}`,
+                    cmdBlacklist: false
                 })
-                .then(async () => {
+
+		.then(async () => {
                     await enfinity.interaction.editReply({
                         embeds: [
                             new enfinity.Gateway.EmbedBuilder()
