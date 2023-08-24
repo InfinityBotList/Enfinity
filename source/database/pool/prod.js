@@ -8,6 +8,6 @@ global.pool = new Pool({
 })
 
 
-global.pool.on('drain', client.end.bind(client));
+global.pool.on('drain', global.pool.end.bind(client));
 
 module.exports = global.pool
