@@ -4,7 +4,7 @@ Official Support/Management bot for the [Infinity Bot List](https://infinitybots
 ---
 
 ## About
-This is a simple discord bot made using `postgress and discord.js (v14)` which allows us to handle
+This is a simple discord bot made using `PostgreSQL and discord.js (v14)` which allows us to handle
 user and staff member based moderation at staff and management levels (ie this bot handles staff punishments too)
 it also allows us to send helpful messages such as facts, support articles and more.
 
