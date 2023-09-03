@@ -1,8 +1,8 @@
 {
-    "name": "@infinity/support-bot",
+    "name": "@infinitylist/enfinity",
     "description": "Support/Management Bot for Infinity Bot List",
     "author": "Toxic Dev",
-    "version": "1.0.0",
+    "version": "2.0.0.dev-1",
     "main": "source/handlers/enfinity/client.js",
     "license": "NO LICENSE",
     "private": false,
