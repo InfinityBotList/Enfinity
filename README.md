@@ -1,4 +1,7 @@
 # Enfinity
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 Official Support/Management bot for the [Infinity Bot List](https://infinitybots.gg) servers.
 
 ---
@@ -29,3 +32,25 @@ open-source however we have a few things you should keep in mind before you make
 - Commitlint: ensures you follow our standards when using commit messages
 
 ---
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://tydoesdev.me"><img src="https://avatars.githubusercontent.com/u/140351954?v=4?s=100" width="100px;" alt="Tyler H"/><br /><sub><b>Tyler H</b></sub></a><br /><a href="#infra-TyDoesDev" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/InfinityBotList/Enfinity/commits?author=TyDoesDev" title="Code">💻</a> <a href="#projectManagement-TyDoesDev" title="Project Management">📆</a> <a href="https://github.com/InfinityBotList/Enfinity/commits?author=TyDoesDev" title="Tests">⚠️</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
