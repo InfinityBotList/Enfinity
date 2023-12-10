@@ -4,6 +4,7 @@
   ],
   "imageSize": 100,
   "commit": false,
+  "badgeTemplate": "[![All Contributors](https://img.shields.io/github/all-contributors/InfinityBotList/Enfinity?color=ee8449&style=flat-square)](#contributors)",
   "commitType": "docs",
   "commitConvention": "angular",
   "contributors": [
@@ -12,6 +13,10 @@
       "name": "Tyler H",
       "avatar_url": "https://avatars.githubusercontent.com/u/140351954?v=4",
       "profile": "https://tydoesdev.me",
+      "login": "TheRealToxicDev",
+      "name": "Toxic Dev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59587139?v=4",
+      "profile": "https://toxicdev.me",
       "contributions": [
         "infra",
         "code",
