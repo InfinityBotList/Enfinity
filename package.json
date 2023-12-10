@@ -8,6 +8,8 @@
     "private": false,
 
     "scripts": {
+        "contributors:add": "all-contributors add",
+        "contributors:generate": "all-contributors generate",
         "dev": "nodemon source/handlers/enfinity/client.js",
         "format:write": "prettier -w .",
         "format:check": "prettier -c .",
