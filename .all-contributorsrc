@@ -3,15 +3,28 @@
     "README.md"
   ],
   "imageSize": 100,
-  "commit": true,
+  "commit": false,
   "badgeTemplate": "[![All Contributors](https://img.shields.io/github/all-contributors/InfinityBotList/Enfinity?color=ee8449&style=flat-square)](#contributors)",
-  "contributors": [],
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "TheRealToxicDev",
+      "name": "Toxic Dev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59587139?v=4",
+      "profile": "https://toxicdev.me",
+      "contributions": [
+        "infra",
+        "code",
+        "projectManagement",
+        "test"
+      ]
+    }
+  ],
   "contributorsPerLine": 7,
-  "projectName": "Enfinity",
-  "projectOwner": "InfinityBotList",
+  "skipCi": true,
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true,
-  "commitType": "docs",
-  "commitConvention": "angular"
+  "projectName": "Enfinity",
+  "projectOwner": "InfinityBotList"
 }
