@@ -1,6 +1,6 @@
 # Enfinity
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/github/all-contributors/InfinityBotList/Enfinity?color=ee8449&style=flat-square)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 Official Support/Management bot for the [Infinity Bot List](https://infinitybots.gg) servers.
 
@@ -43,7 +43,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://tydoesdev.me"><img src="https://avatars.githubusercontent.com/u/140351954?v=4?s=100" width="100px;" alt="Tyler H"/><br /><sub><b>Tyler H</b></sub></a><br /><a href="#infra-TyDoesDev" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/InfinityBotList/Enfinity/commits?author=TyDoesDev" title="Code">💻</a> <a href="#projectManagement-TyDoesDev" title="Project Management">📆</a> <a href="https://github.com/InfinityBotList/Enfinity/commits?author=TyDoesDev" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://toxicdev.me"><img src="https://avatars.githubusercontent.com/u/59587139?v=4?s=100" width="100px;" alt="Toxic Dev"/><br /><sub><b>Toxic Dev</b></sub></a><br /><a href="#infra-TheRealToxicDev" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/InfinityBotList/Enfinity/commits?author=TheRealToxicDev" title="Code">💻</a> <a href="#projectManagement-TheRealToxicDev" title="Project Management">📆</a> <a href="https://github.com/InfinityBotList/Enfinity/commits?author=TheRealToxicDev" title="Tests">⚠️</a></td>
     </tr>
   </tbody>
