@@ -1,6 +1,6 @@
 import { config as insertEnv } from 'dotenv';
 import { Partials, IntentsBitField } from 'discord.js';
-import { EnfinityClient } from '@/client/enfinity';
+import { EnfinityClient } from './client/enfinity';
 
 insertEnv();
 

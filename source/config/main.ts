@@ -1,4 +1,4 @@
-import type { IConfig } from '@/types/client.types';
+import type { IConfig } from '../types/client.types';
 import { config as load_env_vars } from 'dotenv';
 
 load_env_vars();

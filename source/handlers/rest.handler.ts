@@ -1,8 +1,8 @@
 import { REST, Routes, ApplicationCommand } from 'discord.js';
 
-import type { EnfinityClient } from '@/client/enfinity';
-import type { ICommand } from '@/types/cmd.types';
-import { Logger } from '@/utils/logger';
+import type { EnfinityClient } from '../client/enfinity';
+import type { ICommand } from '../types/cmd.types';
+import { Logger } from '../utils/logger';
 
 export class DiscordAPI {
     public client: EnfinityClient;

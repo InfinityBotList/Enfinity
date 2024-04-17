@@ -1,29 +1,21 @@
 import { ActivityType } from 'discord.js';
-import type { EnfinityClient } from '@/client/enfinity';
-import { EventTemplate } from '@/temp/event.temp';
+import type { EnfinityClient } from '../../enfinity';
+import { EventTemplate } from '../../../temp/event.temp';
 
 export default class ReadyEvent extends EventTemplate {
-
-    private bot: EnfinityClient;
-
-    constructor(bot: EnfinityClient) {
-        super({
-            name: 'ready',
-            once: true
-        });
-
-        this.bot = bot;
+    constructor() {
+        super({ name: 'ready', once: true });
     }
 
-    public async exec(): Promise<void> {
+    public async exec(bot: EnfinityClient): Promise<void> {
 
-        this.bot.logger.success(`${this.bot.user?.tag} is now online and ready!`);
-        this.bot.logger.info(`[PARTIAL_TOKEN]: ${this.bot.config.client.token.substring(0, 20)}.********`);
+        bot.logger.success(`${bot.user?.tag} is now online and ready!`);
+        bot.logger.info(`[PARTIAL_TOKEN]: ${bot.config.client.token.substring(0, 20)}.********`);
 
-        this.bot.user?.setStatus('idle');
+        bot.user?.setStatus('idle');
 
-        this.bot.user?.setActivity({
-            name: 'Watching over the Infinity Servers',
+        bot.user?.setActivity({
+            name: 'Playing with yo mama!',
             type: ActivityType.Custom
         })
     }

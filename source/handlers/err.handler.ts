@@ -1,7 +1,10 @@
-import { EnfinityClient } from "@/client/enfinity";
-import { IError, IThrowError } from '@/types/client.types';
+import { EnfinityClient } from "../client/enfinity";
+import { IError, IThrowError } from '../types/client.types';
 import { PrismaClient } from "@prisma/client";
-import { Logger } from "@/utils/logger";
+import { Logger } from "../utils/logger";
+import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
+
 
 export class ErrorHandler {
 
@@ -15,25 +18,39 @@ export class ErrorHandler {
         this.db = new PrismaClient();
     }
 
-    public async throw(message: string, opts: IThrowError['opts']): Promise<void> {
+    public async throw(message: string, opts: IThrowError['opts']): Promise<IError> {
 
         const error = new Error(message) as IError;
+        const reportId = await uuidv4().toString();
 
         await this.create({
+            id: reportId,
             name: 'ENFINITY_ERROR',
-            message: error.message,
+            message: message,
             state: opts.state,
             type: opts.type,
             info: opts.info,
             stack: opts.stack ? opts.stack : null
         });
 
-        throw error;
+        await this.log({
+            id: reportId,
+            name: 'ENFINITY_ERROR',
+            message: message,
+            state: opts.state,
+            type: opts.type,
+            info: opts.info,
+            stack: opts.stack
+        })
+
+        return error;
     }
 
-    public async create({ name, message, state, type, info, stack }: IError): Promise<void> {
+    public async create({ id, name, message, state, type, info, stack }: IError): Promise<void> {
+
         await this.db.errors.create({
             data: {
+                id: id,
                 name: name,
                 message: message,
                 state: state,
@@ -60,6 +77,33 @@ export class ErrorHandler {
             info: error.info,
             stack: error.stack,
             message: error.message
+        }
+    }
+
+    private async log({ id, name, state, info }: IError): Promise<void> {
+        try {
+            await axios.post(process.env.ProxyURL as string, {
+                content: `<@!510065483693817867>`,
+                embeds: [
+                    {
+                        title: `Whoops, something went wrong!`,
+                        color: 0xff0000,
+                        description: `You can use the ID below to view more information about this error.`,
+                        fields: [{
+                            name: 'ID',
+                            value: `${id}`,
+                            inline: true
+                        }]
+                    }
+                ]
+            }, {
+                headers: {
+                    Authorization: process.env.ProxyKey
+                }
+            })
+        } catch (err: any) {
+            this.logger.error(`Failed to log error to Discord: ${err.message}`);
+            this.logger.debug(err.stack as string);
         }
     }
 }

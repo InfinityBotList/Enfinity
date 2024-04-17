@@ -1,5 +1,5 @@
 import { EmbedBuilder, EmbedField, HexColorString } from 'discord.js';
-import { config } from '@/config/main';
+import { config } from '../config/main';
 
 export class MessageEmbed extends EmbedBuilder {
     constructor(data: {

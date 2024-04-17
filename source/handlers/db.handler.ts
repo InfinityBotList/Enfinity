@@ -1,8 +1,8 @@
-import { IError } from "@/types/client.types";
-import type { EnfinityClient } from "@/client/enfinity";
-import { ErrorHandler } from "@/handlers/err.handler";
+import { IError } from "../types/client.types";
+import type { EnfinityClient } from "../client/enfinity";
+import { ErrorHandler } from "../handlers/err.handler";
 import { PrismaClient } from "@prisma/client";
-import { Logger } from "@/utils/logger";
+import { Logger } from "../utils/logger";
 import { user } from '@prisma/client';
 
 export class DatabaseHandler {

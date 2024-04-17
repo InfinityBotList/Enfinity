@@ -1,4 +1,4 @@
-import { EnfinityClient } from "@/client/enfinity";
+import { EnfinityClient } from "../client/enfinity";
 
 export interface IEvent {
     props: IEventProps;

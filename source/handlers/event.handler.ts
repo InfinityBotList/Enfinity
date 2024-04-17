@@ -1,9 +1,9 @@
 import { readdirSync } from 'node:fs';
 import { join, sep } from 'node:path';
 
-import type { EnfinityClient } from '@/client/enfinity';
-import type { IEvent } from '@/types/event.types';
-import { Logger } from '@/utils/logger';
+import type { EnfinityClient } from '../client/enfinity';
+import type { IEvent } from '../types/event.types';
+import { Logger } from '../utils/logger';
 
 export class EventHandler {
     public client: EnfinityClient;

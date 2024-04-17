@@ -1,6 +1,6 @@
-import * as CommandTypes from '@/types/cmd.types';
+import * as CommandTypes from '../types/cmd.types';
 import { Collection, HexColorString } from 'discord.js';
-import { EnfinityClient } from '@/client/enfinity';
+import { EnfinityClient } from '../client/enfinity';
 
 export interface IConfig {
     rest: '10';

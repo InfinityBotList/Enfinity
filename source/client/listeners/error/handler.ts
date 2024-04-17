@@ -1,5 +1,5 @@
-import type { EnfinityClient } from '@/client/enfinity';
-import { EventTemplate } from '@/temp/event.temp';
+import type { EnfinityClient } from '../../enfinity';
+import { EventTemplate } from '../../../temp/event.temp';
 
 /**
  * This event should handle any errors that occur within the bot.
@@ -10,17 +10,22 @@ import { EventTemplate } from '@/temp/event.temp';
  * @return {Promise<void>}
  */
 export default class ErrorEvent extends EventTemplate {
-
-    private bot: EnfinityClient;
-
-    constructor(bot: EnfinityClient) {
+    constructor() {
         super({ name: 'error' });
-
-        this.bot = bot;
     }
 
-    public async exec(err: Error): Promise<void> {
-        this.bot.logger.error(`An error has occurred: ${err.message}`);
-        this.bot.logger.debug(err.stack as any)
+    public async exec(bot: EnfinityClient, err: Error): Promise<void> {
+        await bot.error.throw(err.message, {
+            state: 'OPEN',
+            type: 'BOT',
+            info: 'An error has occurred within the bot.',
+            stack: {
+                info: err.message,
+                err_stack: err.stack,
+                file_trace: new Error().stack
+            }
+        })
+
+        return bot.logger.error(`An error has occurred: ${err.message}`);
     }
 }

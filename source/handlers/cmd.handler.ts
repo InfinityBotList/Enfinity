@@ -2,10 +2,10 @@ import { readdirSync } from 'node:fs';
 import { join, sep } from 'node:path';
 import { Collection } from 'discord.js';
 
-import { ICommandHandler } from '@/types/client.types';
-import type { ICommand } from '@/types/cmd.types';
-import { EnfinityClient } from '@/client/enfinity';
-import { Logger } from '@/utils/logger';
+import { ICommandHandler } from '../types/client.types';
+import type { ICommand } from '../types/cmd.types';
+import { EnfinityClient } from '../client/enfinity';
+import { Logger } from '../utils/logger';
 
 export class CommandHandler implements ICommandHandler {
     public client: EnfinityClient;

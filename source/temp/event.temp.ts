@@ -1,4 +1,4 @@
-import type { IEventBase } from '@/types/event.types';
+import type { IEventBase } from '../types/event.types';
 
 export class EventTemplate implements IEventBase {
     public props: IEventBase['props'];
