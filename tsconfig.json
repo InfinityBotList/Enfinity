@@ -1,0 +1,57 @@
+{
+    "compilerOptions": {
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "strict": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+        "noUncheckedIndexedAccess": true,
+        "resolveJsonModule": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "lib": [
+            "ESNext",
+            "ES2022"
+        ],
+        "target": "ES2022",
+        "useDefineForClassFields": true,
+        "baseUrl": ".",
+        "rootDir": ".",
+        "moduleResolution": "Node",
+        "module": "CommonJS",
+        "noEmitHelpers": true,
+        "importHelpers": true,
+        "outDir": "./build",
+        "inlineSourceMap": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "paths": {
+            "@/*": [
+                "source/*"
+            ],
+            "@/client/*": [
+                "source/client/*"
+            ],
+            "@/config/*": [
+                "source/config/*"
+            ],
+            "@/handler/*": [
+                "source/handlers/*"
+            ],
+            "@/types/*": [
+                "source/types/*"
+            ],
+            "@/utils/*": [
+                "source/utils/*"
+            ],
+        }
+    },
+    "include": [
+        "./node_moudles/@types",
+        "./source/**/*"
+    ],
+    "exclude": [
+        "./node_modules",
+        "./build"
+    ]
+}

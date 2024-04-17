@@ -1,0 +1,73 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE")
+}
+
+model user {
+    id     String  @id
+    name   String
+    avatar String
+    banned Boolean
+    total  Int     @default(0)
+    staff  Boolean @default(false)
+    cases  cases[]
+}
+
+model cases {
+    id        String      @id @default(uuid())
+    guild     String
+    type      CaseTypes   @default(USER_CASE)
+    action    CaseActions @default(WARN)
+    reason    String
+    moderator String
+    createdAt DateTime    @default(now())
+    duration  Int?
+
+    user   user?   @relation(fields: [userId], references: [id])
+    userId String?
+}
+
+model errors {
+    id        String      @id @unique @default(uuid())
+    name      String      @default("ENFINITY_ERROR")
+    message   String      @default("An unknown error occurred.")
+    state     ErrorStates @default(OPEN)
+    type      ErrorTypes  @default(UNKNOWN)
+    info      String      @default("No error info/message available.")
+    stack     Json
+    createdAt DateTime    @default(now())
+    updatedAt DateTime?   @updatedAt
+    closedAt  DateTime?
+}
+
+enum CaseTypes {
+    USER_CASE
+    STAFF_CASE
+}
+
+enum CaseActions {
+    BAN
+    KICK
+    MUTE
+    WARN
+    TIMEOUT
+}
+
+enum ErrorStates {
+    OPEN
+    INVESTIGATING
+    INFO_NEEDED
+    CLOSED
+}
+
+enum ErrorTypes {
+    BOT
+    USER
+    GUILD
+    DATABASE
+    UNKNOWN
+}

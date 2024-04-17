@@ -1,0 +1,38 @@
+{
+    "name": "@infinitybots/enfinity",
+    "description": "Official Moderation/Management bot for Infinity Bot List",
+    "version": "2.0.0-dev.1",
+    "main": "source/app.ts",
+    "author": "Toxic Dev <https://toxicdev.me>",
+    "license": "UNLICENSED",
+    "dependencies": {
+        "@prisma/client": "^5.12.1",
+        "discord.js": "^14.14.1",
+        "dotenv": "^16.4.5",
+        "moment": "^2.30.1",
+        "prisma": "^5.12.1"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^17.6.6",
+        "@commitlint/config-conventional": "^16.2.4",
+        "@types/node": "^20.12.7",
+        "husky": "^8.0.3",
+        "nodemon": "^3.1.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.4.5"
+    },
+    "scripts": {
+        "bot:build": "tsc",
+        "bot:dev": "nodemon source/app.ts",
+        "bot:prod": "node build/source/app.js",
+        "db:create": "prisma generate --schema=./prisma/schema.prisma",
+        "db:deploy": "prisma migrate deploy --schema=./prisma/schema.prisma",
+        "db:develop": "prisma migrate dev --schema=./prisma/schema.prisma",
+        "db:format": "prisma format --schema=./prisma/schema.prisma",
+        "db:update": "prisma db push --schema=./prisma/schema.prisma",
+        "format:check": "prettier -c .",
+        "format:write": "prettier -w .",
+        "linter:start": "eslint .",
+        "prepare": "husky install"
+    }
+}
