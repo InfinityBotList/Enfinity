@@ -37,3 +37,13 @@ Starting the bot is extremely simple (if you have finished all the steps above):
 - `yarn bot:dev` - Runs the bot in a development environment using `nodemon` which will automatically restart the bot when changes are saved.
 
 ---
+
+## Adding new Commands
+Adding new commands to the bot can be kind of challenging, but if you follow our instructions you should be fine:
+
+1. Navigate to the [template command](./source/temp/temp.cmd.ts) file
+2. Copy the code found within this file
+3. Navigate to the [commands directory](./source/client/commands)
+4. Choose a category directory or create a new one
+5. Add a new command file to the directory (ex: test.ts)
+6. Paste the contents from the template command into your new command file and edit it to suit your needs
