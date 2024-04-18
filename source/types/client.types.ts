@@ -5,7 +5,6 @@ import { EnfinityClient } from '../client/enfinity';
 export interface IConfig {
     rest: '10';
     client: {
-        id: string;
         token: string;
     }
     guild: {
@@ -21,6 +20,10 @@ export interface IConfig {
     }
 }
 
+export interface IPermsConfig {
+    devs: string[]
+}
+
 /**
  * Interface for the Command Handler
  * @property {EnfinityClient} client - The client instance
@@ -34,11 +37,10 @@ export interface IConfig {
 export interface ICommandHandler {
     client: EnfinityClient;
     commands: Collection<string, CommandTypes.ICommand>
-    get(name: string): Promise<CommandTypes.ICommand>;
-    readonly all: Collection<string, CommandTypes.ICommand>;
+    get(name: string, type: 'guild' | 'global'): Promise<CommandTypes.ICommand>;
+    all(type: 'guild' | 'global'): Collection<string, CommandTypes.ICommand>;
     category(category: string): Collection<string, CommandTypes.ICommand>;
-    loadPublicCommands(dir: string): void;
-    loadPrivateCommands(dir: string): void;
+    loadCommands(dir: string, type: 'guild' | 'global'): void;
 }
 
 export interface IError extends Error {

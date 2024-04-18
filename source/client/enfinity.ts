@@ -17,6 +17,7 @@ export class EnfinityClient extends Client {
     public MessageEmbed: any = MessageEmbed;
     public error = new ErrorHandler(this);
     public rest_api = new DiscordAPI(this);
+    public gcommands = new CommandHandler(this);
     public commands = new CommandHandler(this);
     public events = new EventHandler(this);
 
@@ -40,7 +41,8 @@ export class EnfinityClient extends Client {
 
     private init(): void {
         this.events.loadEvents(join(__dirname, './listeners/'));
-        this.commands.loadPublicCommands(join(__dirname, './public/'))
+        this.commands.loadCommands(`${join(__dirname, './public/')}`, 'global')
+        this.gcommands.loadCommands(`${join(__dirname, './private/')}`, 'guild')
     }
 
     private handleErrors(): void {

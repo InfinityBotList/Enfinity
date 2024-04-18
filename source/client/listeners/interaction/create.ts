@@ -12,32 +12,35 @@ export default class ReadyEvent extends EventTemplate {
 
         if (!interaction.isCommand()) return;
 
-        const command = await bot.commands.get(interaction.commandName);
+        const command = await bot.commands.get(interaction.commandName, 'global');
+        const gcommand = await bot.gcommands.get(interaction.commandName, 'guild');
 
-        if (!command) return;
+        const cmd = command || gcommand;
 
-        if (command.props.permissions?.user && !interaction.memberPermissions?.has(command.props.permissions.user)) {
+        if (!cmd) return;
+
+        if (cmd.props.permissions?.user && !interaction.memberPermissions?.has(cmd.props.permissions.user)) {
             return interaction.reply({
                 ephemeral: true,
                 embeds: [
                     new bot.MessageEmbed({
                         title: 'Error: missing permissions',
-                        description: `You need the following permissions to run this command: \`${command.props.permissions.user.join('`, `')}\``,
+                        description: `You need the following permissions to run this command: \`${cmd.props.permissions.user.join('`, `')}\``,
                         color: bot.config.colors.error
                     })
                 ]
             })
         }
 
-        if (bot && bot.user && command.props.permissions?.bot) {
+        if (bot && bot.user && cmd.props.permissions?.bot) {
             const botMember = interaction?.guild?.members.cache.get(bot.user.id);
-            if (botMember && !botMember.permissions.has(command.props.permissions.bot)) {
+            if (botMember && !botMember.permissions.has(cmd.props.permissions.bot)) {
                 return interaction.reply({
                     ephemeral: true,
                     embeds: [
                         new bot.MessageEmbed({
                             title: 'Error: missing permissions',
-                            description: `I need the following permissions to run this command: \`${command.props.permissions.bot.join('`, `')}\``,
+                            description: `I need the following permissions to run this command: \`${cmd.props.permissions.bot.join('`, `')}\``,
                             color: bot.config.colors.error
                         })
                     ]
@@ -45,15 +48,34 @@ export default class ReadyEvent extends EventTemplate {
             }
         }
 
-        if (command.props.cooldown > 0) {
-            if (!bot.cooldown.has(command.props.name)) {
-                bot.cooldown.set(command.props.name, new Collection());
+        if (cmd.props.permissions?.dev) {
+            const dev = bot.guilds.cache.get(bot.config.guild.id)?.members.fetch(interaction.user.id);
+            const dev_role = '870950609291972625';
+            const lead_dev = '870950609317150732';
+
+            if (dev && !(await dev).roles.cache.has(lead_dev) || dev && !(await dev).roles.cache.has(dev_role)) {
+                return interaction.reply({
+                    ephemeral: true,
+                    embeds: [
+                        new bot.MessageEmbed({
+                            title: 'Error: missing permissions',
+                            description: `Sorry chief, only my developers can use this command!`,
+                            color: bot.config.colors.error
+                        })
+                    ]
+                })
+            }
+        }
+
+        if (cmd.props.cooldown > 0) {
+            if (!bot.cooldown.has(cmd.props.name)) {
+                bot.cooldown.set(cmd.props.name, new Collection());
             }
 
             const now = Date.now();
 
-            const timestamp = bot.cooldown.get(command.props.name);
-            const cooldownTime = command.props.cooldown * 1000;
+            const timestamp = bot.cooldown.get(cmd.props.name);
+            const cooldownTime = cmd.props.cooldown * 1000;
 
             if (timestamp?.has(interaction.user.id)) {
                 const cooldown = timestamp.get(interaction.user.id);
@@ -90,7 +112,7 @@ export default class ReadyEvent extends EventTemplate {
         }
 
         try {
-            command.exec(bot, interaction, args);
+            cmd.exec(bot, interaction, args);
         } catch (err: any) {
             await bot.error.throw(err.message, {
                 state: 'OPEN',

@@ -51,31 +51,29 @@ export class DiscordAPI {
 
     /**
      * Register Commands (Guild or Global)
-     * @param {'guild' | 'global'} type - The type of command
+     * @param {'guild' | 'global'} type - The type of commands to register
      * @returns {Promise<void>}
      */
-    public async registerCommands(type: 'guild' | 'global'): Promise<void> {
+    public async register(type: 'guild' | 'global'): Promise<void> {
         try {
-            this.logger.info(`Registering ${type} commands.`);
-
             if (!this.client.user?.id) return this.logger.error('Client was not resolved while registering commands');
 
             if (type === 'guild') {
                 await this.rest_api.put(Routes.applicationGuildCommands(this.client.user.id, this.client.config.guild.id), {
-                    body: this.client.commands.all.map((cmd: ICommand) => cmd.props)
+                    body: this.client.gcommands.all('guild').map((cmd: ICommand) => cmd.props)
                 })
 
-                this.logger.success(`Successfully registered ${this.client.commands.all.size} guild commands`);
+                return this.logger.success(`Successfully registered ${this.client.gcommands.all('guild').size} guild commands`);
             } else {
                 await this.rest_api.put(Routes.applicationCommands(this.client.user.id), {
-                    body: this.client.commands.all.map((cmd: ICommand) => cmd.props)
+                    body: this.client.commands.all('global').map((cmd: ICommand) => cmd.props)
                 })
 
-                this.logger.success(`Successfully registered ${this.client.commands.all.size} global commands`);
+                return this.logger.success(`Successfully registered ${this.client.commands.all('global').size} global commands`);
             }
         } catch (err: any) {
             this.logger.error(`Failed to register ${type} commands`);
-            this.logger.error(err.stack)
+            this.logger.debug(err.stack)
         }
     }
 
@@ -95,7 +93,7 @@ export class DiscordAPI {
 
             this.logger.info(`Command ID located for: ${name}`);
 
-            let command = await this.client.commands.get(name);
+            let command = await this.client.commands.get(name, type);
 
             if (type === 'guild') {
                 await this.rest_api.put(Routes.applicationGuildCommand(this.client.user.id, this.client.config.guild.id, cmd), {

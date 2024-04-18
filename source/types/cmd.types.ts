@@ -32,7 +32,7 @@ export interface ICommandProps {
     cooldown: number;
     permissions?: ICommandPerms
     examples?: ICommandExamples[];
-    options?: ICommandOptions;
+    options?: ICommandOptions[];
 }
 
 export interface ICommandPerms {
@@ -49,10 +49,10 @@ export interface ICommandExamples {
 export interface ICommandOptions {
     name: string;
     description: string;
-    examples: ICommandExamples[];
-    choices: ICommandChoices[];
-    options: ISubCommandOptions;
-    required: boolean;
+    examples?: ICommandExamples[];
+    choices?: ICommandChoices[];
+    options?: ISubCommandOptions[];
+    required?: boolean;
     type: number;
 }
 
@@ -64,8 +64,23 @@ export interface ICommandChoices {
 export interface ISubCommandOptions {
     name: string;
     description: string;
-    required: boolean;
-    choices: ICommandChoices[];
+    required?: boolean;
+    choices?: ICommandChoices[];
+    options?: ICommandOptions[];
     type: number;
+}
+
+export const OptionTypes = {
+    SubCommand: 1,
+    SubCommandGroup: 2,
+    String: 3,
+    Integer: 4,
+    Boolean: 5,
+    User: 6,
+    Channel: 7,
+    Role: 8,
+    Mentionable: 9,
+    Number: 10,
+    Attachment: 11,
 }
 

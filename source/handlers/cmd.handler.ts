@@ -9,6 +9,7 @@ import { Logger } from '../utils/logger';
 
 export class CommandHandler implements ICommandHandler {
     public client: EnfinityClient;
+    public gcommands: Collection<string, ICommand> = new Collection();
     public commands: Collection<string, ICommand> = new Collection();
     public logger: Logger;
 
@@ -22,8 +23,8 @@ export class CommandHandler implements ICommandHandler {
      * @param {string} name - The name of the command
      * @returns {Promise<ICommand>}
      */
-    public async get(name: string): Promise<ICommand> {
-        const command = this.commands.get(name);
+    public async get(name: string, type: 'guild' | 'global'): Promise<ICommand> {
+        const command = type === 'guild' ? this.gcommands.get(name) : this.commands.get(name);
 
         if (!command) throw new Error(`Command: ${name} does not exist!`);
 
@@ -34,8 +35,8 @@ export class CommandHandler implements ICommandHandler {
      * Get all commands
      * @returns {Collection<string, ICommand>}
      */
-    public get all(): Collection<string, ICommand> {
-        return this.commands;
+    public all(type: 'guild' | 'global'): Collection<string, ICommand> {
+        return type === 'guild' ? this.gcommands : this.commands;
     }
 
     /**
@@ -48,11 +49,11 @@ export class CommandHandler implements ICommandHandler {
     }
 
     /**
-     * Load all public commands
+     * Load all commands (guild or global)
      * @param {string} dir - The directory to load commands from
      * @returns {void}
      */
-    public loadPublicCommands(dir: string): void {
+    public loadCommands(dir: string, type: 'guild' | 'global'): void {
         readdirSync(dir).forEach(async (subDir: string): Promise<void> => {
             const commands = readdirSync(`${dir}${sep}${subDir}${sep}`)
 
@@ -62,35 +63,20 @@ export class CommandHandler implements ICommandHandler {
 
                 if (typeof command.props.name !== 'string') return this.logger.error(`Command: ${file} does not have a valid name!`);
                 if (typeof command.exec !== 'function') return this.logger.error(`Command: ${file} does not have a valid execute function!`);
-                if (this.commands.has(command.props.name)) return this.logger.error(`Command: ${command.props.name} already exists!`);
 
-                this.commands.set(command.props.name, command);
+                if (type === 'guild') {
+                    if (this.gcommands.has(command.props.name)) return this.logger.error(`Command: ${command.props.name} already exists!`);
 
-                this.logger.info(`Loaded global command: ${command.props.name}`);
-            }
-        })
-    }
+                    this.gcommands.set(command.props.name, command);
 
-    /**
-     * Load all private (guild only) commands
-     * @param {string} dir - The directory to load commands from
-     * @returns {void}
-     */
-    public loadPrivateCommands(dir: string): void {
-        readdirSync(dir).forEach(async (subDir: string): Promise<void> => {
-            const commands = readdirSync(`${dir}${sep}${subDir}${sep}`)
+                    this.logger.info(`Loaded ${type} command: ${command.props.name}`);
+                } else {
+                    if (this.commands.has(command.props.name)) return this.logger.error(`Command: ${command.props.name} already exists!`);
 
-            for (const file of commands) {
-                const instance = await import(join(dir, subDir, file));
-                const command: ICommand = new instance.default();
+                    this.commands.set(command.props.name, command);
 
-                if (typeof command.props.name !== 'string') return this.logger.error(`Command: ${file} does not have a valid name!`);
-                if (typeof command.exec !== 'function') return this.logger.error(`Command: ${file} does not have a valid execute function!`);
-                if (this.commands.has(command.props.name)) return this.logger.error(`Command: ${command.props.name} already exists!`);
-
-                this.commands.set(command.props.name, command);
-
-                this.logger.info(`Loaded guild command: ${command.props.name}`);
+                    this.logger.info(`Loaded ${type} command: ${command.props.name}`);
+                }
             }
         })
     }

@@ -22,11 +22,13 @@ export class ErrorHandler {
 
         const error = new Error(message) as IError;
         const reportId = await uuidv4().toString();
+        const maxLength = 191;
+        const truncated = message ? message.slice(0, maxLength) : 'Something went wrong here!'
 
         await this.create({
             id: reportId,
             name: 'ENFINITY_ERROR',
-            message: message,
+            message: truncated,
             state: opts.state,
             type: opts.type,
             info: opts.info,
@@ -34,13 +36,9 @@ export class ErrorHandler {
         });
 
         await this.log({
-            id: reportId,
+            id: reportId.split('-')[0],
             name: 'ENFINITY_ERROR',
-            message: message,
-            state: opts.state,
-            type: opts.type,
-            info: opts.info,
-            stack: opts.stack
+            type: opts.type
         })
 
         return error;
@@ -64,23 +62,29 @@ export class ErrorHandler {
         })
     }
 
+    /**
+     * Fetch an error by ID.
+     * @param id The ID of the error you want to fetch.
+     * @returns The error object.
+     */
     public async fetch(id: string): Promise<IError | null> {
-        const error = await this.db.errors.findUnique({ where: { id } });
+        const errors = await this.db.errors.findMany();
+        const error = errors.find(error => error.id.startsWith(id));
 
         if (!error) return null;
 
         return {
             id: error.id,
             name: 'ENFINITY_ERROR',
-            state: error.state as IError['state'],
-            type: error.type as IError['type'],
+            state: error.state,
+            type: error.type,
             info: error.info,
-            stack: error.stack,
-            message: error.message
+            message: error.message,
+            stack: error.stack
         }
     }
 
-    private async log({ id, name, state, info }: IError): Promise<void> {
+    private async log({ id, name, type }: any): Promise<void> {
         try {
             await axios.post(process.env.ProxyURL as string, {
                 content: `<@!510065483693817867>`,
@@ -90,8 +94,16 @@ export class ErrorHandler {
                         color: 0xff0000,
                         description: `You can use the ID below to view more information about this error.`,
                         fields: [{
-                            name: 'ID',
+                            name: 'Error ID',
                             value: `${id}`,
+                            inline: true
+                        }, {
+                            name: 'Error Name',
+                            value: `${name}`,
+                            inline: true
+                        }, {
+                            name: 'Error Type',
+                            value: `${type}`,
                             inline: true
                         }]
                     }

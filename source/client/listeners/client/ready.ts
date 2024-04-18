@@ -10,6 +10,7 @@ export default class ReadyEvent extends EventTemplate {
     public async exec(bot: EnfinityClient): Promise<void> {
 
         await bot.rest_api.registerCommands('global');
+        await bot.rest_api.registerCommands('guild');
 
         bot.logger.success(`${bot.user?.tag} is now online and ready!`);
         bot.logger.info(`[PARTIAL_TOKEN]: ${bot.config.client.token.substring(0, 20)}.********`);
