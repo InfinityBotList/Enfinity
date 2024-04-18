@@ -19,7 +19,7 @@ export class EventHandler {
      * @param {string} dir - The directory to load events from
      * @returns {void}
      */
-    public loadEvents(dir: string): void {
+    public load(dir: string): void {
         readdirSync(dir).forEach(async (subDir: string): Promise<void> => {
             const events = readdirSync(`${dir}${sep}${subDir}${sep}`);
 

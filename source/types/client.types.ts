@@ -1,5 +1,5 @@
 import * as CommandTypes from '../types/cmd.types';
-import { Collection, HexColorString } from 'discord.js';
+import { Collection, HexColorString, StringSelectMenuBuilder } from 'discord.js';
 import { EnfinityClient } from '../client/enfinity';
 
 export interface IConfig {
@@ -37,10 +37,10 @@ export interface IPermsConfig {
 export interface ICommandHandler {
     client: EnfinityClient;
     commands: Collection<string, CommandTypes.ICommand>
-    get(name: string, type: 'guild' | 'global'): Promise<CommandTypes.ICommand>;
-    all(type: 'guild' | 'global'): Collection<string, CommandTypes.ICommand>;
+    get(name: string): Promise<CommandTypes.ICommand>;
+    all(): Collection<string, CommandTypes.ICommand>;
     category(category: string): Collection<string, CommandTypes.ICommand>;
-    loadCommands(dir: string, type: 'guild' | 'global'): void;
+    load(dir: string): void;
 }
 
 export interface IError extends Error {

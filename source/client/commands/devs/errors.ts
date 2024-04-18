@@ -56,40 +56,50 @@ export default class ErrorCommand extends CommandTemplate {
         switch (interaction.options.getSubcommand()) {
 
             case 'view': {
-                const id = interaction.options.getString('id', true);
+                try {
+                    const id = interaction.options.getString('id', true);
 
-                const error = await bot.error.fetch(id);
+                    const error = await bot.error.fetch(id);
 
-                if (!error) return interaction.reply({
-                    ephemeral: true,
-                    embeds: [
-                        new bot.MessageEmbed({
-                            title: 'Error: not found',
-                            description: 'The error you are looking for does not exist.',
-                            color: bot.config.colors.error
-                        })
-                    ]
-                })
+                    if (!error) return interaction.reply({
+                        ephemeral: true,
+                        embeds: [
+                            new bot.MessageEmbed({
+                                title: 'Error: not found',
+                                description: 'The error you are looking for does not exist.',
+                                color: bot.config.colors.error
+                            })
+                        ]
+                    })
 
 
-                return interaction.reply({
-                    embeds: [
-                        new bot.MessageEmbed({
-                            title: 'View: error information',
-                            description: 'Here is everything you need to know about this error.',
-                            color: bot.config.colors.base,
-                            fields: [
-                                { name: 'Name', value: error.name, inline: true },
-                                { name: 'State', value: error.state, inline: true },
-                                { name: 'Type', value: error.type, inline: true },
-                                { name: 'Info', value: error.info, inline: true },
-                                { name: 'Message', value: error.message, inline: true },
-                                { name: 'Trace', value: `\`\`\`json${error.stack.trace}\`\`\``, inline: false },
-
-                            ]
-                        })
-                    ]
-                })
+                    return interaction.reply({
+                        embeds: [
+                            new bot.MessageEmbed({
+                                title: 'View: error information',
+                                description: `\`\`\`json\n${JSON.stringify(error.stack.stack, null, 2)}\`\`\``,
+                                color: bot.config.colors.base,
+                                fields: [
+                                    { name: 'Name', value: error.name, inline: true },
+                                    { name: 'State', value: error.state, inline: true },
+                                    { name: 'Type', value: error.info, inline: true },
+                                ]
+                            })
+                        ]
+                    })
+                } catch (err: any) {
+                    bot.logger.error(`Failed to view error: ${err.message}`);
+                    return interaction.reply({
+                        ephemeral: true,
+                        embeds: [
+                            new bot.MessageEmbed({
+                                title: 'Error: failed to view',
+                                description: 'An error occurred while trying to view this error.',
+                                color: bot.config.colors.error
+                            })
+                        ]
+                    })
+                }
             }
         }
     }

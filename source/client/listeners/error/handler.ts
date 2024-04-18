@@ -21,11 +21,12 @@ export default class ErrorEvent extends EventTemplate {
             info: 'An error has occurred within the bot.',
             stack: {
                 info: err.message,
-                err_stack: err.stack,
-                file_trace: new Error().stack
+                stack: err.stack,
+                trace: new Error().stack
             }
         })
 
-        return bot.logger.error(`An error has occurred: ${err.message}`);
+        bot.logger.error(`An error has occurred: ${err.message}`);
+        return bot.logger.debug(err.stack as string);
     }
 }

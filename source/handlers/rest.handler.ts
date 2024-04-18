@@ -19,31 +19,23 @@ export class DiscordAPI {
     /**
      * Get a Command ID (Guild or Global)
      * @param {string} name - The name of the command
-     * @param {'guild' | 'global'} type - The type of command
      * @returns {Promise<string | null>}
      */
-    public async getCommandId(name: string, type: 'guild' | 'global'): Promise<any> {
-
-        let commands: any;
-
+    public async getCommandId(name: string): Promise<any> {
         try {
-            this.logger.info(`Fetching command ID for ${name} - ${type}`)
+            this.logger.info(`Fetching command ID for ${name}`);
 
             if (!this.client.user?.id) return this.logger.error('Client was not resolved while registering commands');
 
-            if (type === 'guild') {
-                commands = await this.rest_api.get(Routes.applicationGuildCommands(this.client.user.id, this.client.config.guild.id));
-            } else {
-                commands = await this.rest_api.get(Routes.applicationCommands(this.client.user.id));
-            }
+            const commands = (await this.rest_api.get(Routes.applicationCommands(this.client.user.id))) as ApplicationCommand[];
 
             const command = commands.find((cmd: ApplicationCommand) => cmd.name === name);
 
-            if (!command) throw new Error(`Command: ${name} was not found in ${type} commands`);
+            if (!command) throw new Error(`Unable to locate command ID for: ${name}`);
 
             return command.id;
         } catch (err: any) {
-            this.logger.error(`Failed to fetch command ID for ${name} - ${type}`);
+            this.logger.error(`Failed to fetch command ID for ${name}`);
             this.logger.error(err.stack)
             return null;
         }
@@ -51,63 +43,47 @@ export class DiscordAPI {
 
     /**
      * Register Commands (Guild or Global)
-     * @param {'guild' | 'global'} type - The type of commands to register
      * @returns {Promise<void>}
      */
-    public async register(type: 'guild' | 'global'): Promise<void> {
+    public async register(): Promise<void> {
         try {
             if (!this.client.user?.id) return this.logger.error('Client was not resolved while registering commands');
 
-            if (type === 'guild') {
-                await this.rest_api.put(Routes.applicationGuildCommands(this.client.user.id, this.client.config.guild.id), {
-                    body: this.client.gcommands.all('guild').map((cmd: ICommand) => cmd.props)
-                })
+            await this.rest_api.put(Routes.applicationCommands(this.client.user.id), {
+                body: this.client.commands.all().map((cmd: ICommand) => cmd.props)
+            })
 
-                return this.logger.success(`Successfully registered ${this.client.gcommands.all('guild').size} guild commands`);
-            } else {
-                await this.rest_api.put(Routes.applicationCommands(this.client.user.id), {
-                    body: this.client.commands.all('global').map((cmd: ICommand) => cmd.props)
-                })
-
-                return this.logger.success(`Successfully registered ${this.client.commands.all('global').size} global commands`);
-            }
+            return this.logger.success(`Successfully registered ${this.client.commands.all().size} commands`);
         } catch (err: any) {
-            this.logger.error(`Failed to register ${type} commands`);
+            this.logger.error(`Failed to register client commands`);
             this.logger.debug(err.stack)
         }
     }
 
     /**
-     * Sync a Command (Guild or Global)
+     * Sync/update a command
      * @param {string} name - The name of the command
-     * @param {'guild' | 'global'} type - The type of command
      * @returns {Promise<void>}
      */
-    public async syncCommand(name: string, type: 'guild' | 'global'): Promise<void> {
+    public async sync(name: string): Promise<void> {
         try {
-            this.logger.info(`Syncing ${type} command: ${name}`);
+            this.logger.info(`Syncing command: ${name}`);
 
             if (!this.client.user?.id) return this.logger.error(`Client was not resolved while syncing command: ${name}`);
 
-            let cmd = await this.getCommandId(name, type);
+            let cmd = await this.getCommandId(name);
 
             this.logger.info(`Command ID located for: ${name}`);
 
-            let command = await this.client.commands.get(name, type);
+            let command = await this.client.commands.get(name);
 
-            if (type === 'guild') {
-                await this.rest_api.put(Routes.applicationGuildCommand(this.client.user.id, this.client.config.guild.id, cmd), {
-                    body: command?.props
-                })
-            } else {
-                await this.rest_api.put(Routes.applicationCommand(this.client.user.id, cmd), {
-                    body: command?.props
-                })
-            }
+            await this.rest_api.patch(Routes.applicationCommand(this.client.user.id, cmd), {
+                body: command?.props
+            });
 
-            this.logger.success(`Successfully synced ${type} command: ${name}`);
+            this.logger.success(`Successfully synced command: ${name}`);
         } catch (err: any) {
-            this.logger.error(`Failed to sync ${type} command: ${name}`);
+            this.logger.error(`Failed to sync command: ${name}`);
             this.logger.error(err.stack)
         }
     }
