@@ -29,13 +29,8 @@
         "bot:dev": "nodemon source/app.ts",
         "bot:prod": "node build/source/app.js",
         "db:create": "prisma generate --schema=./prisma/schema.prisma",
-        "db:deploy": "prisma migrate deploy --schema=./prisma/schema.prisma",
-        "db:develop": "prisma migrate dev --schema=./prisma/schema.prisma",
         "db:format": "prisma format --schema=./prisma/schema.prisma",
         "db:update": "prisma db push --schema=./prisma/schema.prisma",
-        "format:check": "prettier -c .",
-        "format:write": "prettier -w .",
-        "linter:start": "eslint .",
         "prepare": "husky install"
     }
 }
