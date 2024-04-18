@@ -1,4 +1,5 @@
 import { EnfinityClient } from '../client/enfinity';
+import type { CacheType, ChatInputCommandInteraction } from "discord.js"
 
 import type {
     ApplicationCommand,
@@ -14,6 +15,10 @@ export interface ICommand {
         cmd: ApplicationCommand;
         data: ApplicationCommandData;
     }
+    types: {
+        Cache: CacheType;
+        Interaction: ChatInputCommandInteraction
+    }
 }
 
 export interface ICommandBase {
@@ -27,7 +32,7 @@ export interface ICommandProps {
     cooldown: number;
     permissions?: ICommandPerms
     examples?: ICommandExamples[];
-    options: ICommandOptions;
+    options?: ICommandOptions;
 }
 
 export interface ICommandPerms {

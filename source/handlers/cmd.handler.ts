@@ -56,8 +56,6 @@ export class CommandHandler implements ICommandHandler {
         readdirSync(dir).forEach(async (subDir: string): Promise<void> => {
             const commands = readdirSync(`${dir}${sep}${subDir}${sep}`)
 
-            if (!dir.startsWith('public')) return this.logger.error(`Invalid command directory: ${dir} - Public commands should be in a folder named 'public'`);
-
             for (const file of commands) {
                 const instance = await import(join(dir, subDir, file));
                 const command: ICommand = new instance.default();
@@ -68,7 +66,7 @@ export class CommandHandler implements ICommandHandler {
 
                 this.commands.set(command.props.name, command);
 
-                this.logger.info(`Loaded command: ${command.props.name} from ${dir}${sep}${subDir}${sep}${file}`);
+                this.logger.info(`Loaded global command: ${command.props.name}`);
             }
         })
     }
@@ -82,8 +80,6 @@ export class CommandHandler implements ICommandHandler {
         readdirSync(dir).forEach(async (subDir: string): Promise<void> => {
             const commands = readdirSync(`${dir}${sep}${subDir}${sep}`)
 
-            if (!dir.startsWith('private')) return this.logger.error(`Invalid command directory: ${dir} - Private commands should be in a folder named 'private'`);
-
             for (const file of commands) {
                 const instance = await import(join(dir, subDir, file));
                 const command: ICommand = new instance.default();
@@ -94,7 +90,7 @@ export class CommandHandler implements ICommandHandler {
 
                 this.commands.set(command.props.name, command);
 
-                this.logger.info(`Loaded command: ${command.props.name} from ${dir}${sep}${subDir}${sep}${file}`);
+                this.logger.info(`Loaded guild command: ${command.props.name}`);
             }
         })
     }
