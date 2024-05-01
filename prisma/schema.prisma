@@ -13,7 +13,6 @@ model user {
     avatar String
     banned Boolean
     total  Int     @default(0)
-    staff  Boolean @default(false)
     cases  cases[]
 }
 
@@ -22,6 +21,7 @@ model cases {
     guild     String
     type      CaseTypes   @default(USER_CASE)
     action    CaseActions @default(WARN)
+    level     CaseLevel   @default(MINOR)
     reason    String
     moderator String
     createdAt DateTime    @default(now())
@@ -47,6 +47,7 @@ model errors {
 enum CaseTypes {
     USER_CASE
     STAFF_CASE
+    EXPIRED
 }
 
 enum CaseActions {
@@ -55,6 +56,13 @@ enum CaseActions {
     MUTE
     WARN
     TIMEOUT
+}
+
+enum CaseLevel {
+    MINOR
+    MODERATE
+    SEVERE
+    CRITICAL
 }
 
 enum ErrorStates {

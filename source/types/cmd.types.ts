@@ -36,7 +36,9 @@ export interface ICommandProps {
 }
 
 export interface ICommandPerms {
+    hr: boolean;
     dev: boolean;
+    staff: boolean;
     user: PermissionResolvable[];
     bot: PermissionResolvable[];
 }

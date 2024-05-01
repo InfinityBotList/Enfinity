@@ -2,6 +2,7 @@ import { join } from 'node:path';
 import * as ClientTypes from '../types/client.types';
 import { Client, ClientOptions, Collection } from 'discord.js';
 import { MessageEmbed } from '../utils/embed';
+import { DatabaseHandler } from '../handlers/db.handler';
 import { ErrorHandler } from '../handlers/err.handler';
 import { CommandHandler } from '../handlers/cmd.handler';
 import { EventHandler } from '../handlers/event.handler';
@@ -19,6 +20,7 @@ export class EnfinityClient extends Client {
     public rest_api = new DiscordAPI(this);
     public commands = new CommandHandler(this);
     public events = new EventHandler(this);
+    public db = new DatabaseHandler(this);
 
     public logger = new Logger('[CLIENT]');
     public types = ClientTypes;

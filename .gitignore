@@ -5,6 +5,9 @@
 
 clean
 ./clean/*
+./build/*
+./dist/*
+./build
 
 # packages
 package-lock.json

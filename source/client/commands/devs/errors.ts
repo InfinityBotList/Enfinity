@@ -12,7 +12,9 @@ export default class ErrorCommand extends CommandTemplate {
             category: 'devs',
             cooldown: 5,
             permissions: {
-                dev: true,
+                hr: false,
+                dev: false,
+                staff: false,
                 user: [],
                 bot: []
             },

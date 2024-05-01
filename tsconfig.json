@@ -28,7 +28,8 @@
     },
     "include": [
         "./node_moudles/@types",
-        "./source/**/*"
+        "./source/**/*",
+        "source/client/commands/hr/.ts"
     ],
     "exclude": [
         "./node_modules",
