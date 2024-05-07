@@ -40,6 +40,25 @@ export class Spider implements SpiderAPI {
 
                 return true
             },
+            list: async (user: string): Promise<Response> => {
+
+                const spider_res = await fetch(this.url + 'list/team');
+
+                if (!spider_res.ok) return { success: false, message: `Failed to fetch team list!` }
+
+                const spider_data: Team = await spider_res.json() as Team;
+                const spider_user = spider_data.members.find((member: Members) => member.user.id === user);
+
+                if (!spider_user) return { success: false, message: 'Unable to locate that user in our team list' };
+
+                const positions = spider_user.positions.map((pos: Positions) => `- ${pos.perms.join('\n- ')}`);
+
+                return {
+                    success: true,
+                    message: 'Successfully fetched user permissions!',
+                    data: positions.length > 0 ? positions.join('\n') : 'No permissions found'
+                };
+            },
             exists: async (user: string): Promise<boolean> => {
                 const spider_res = await fetch(this.url + 'list/team');
 
