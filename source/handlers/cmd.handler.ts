@@ -22,13 +22,8 @@ export class CommandHandler implements ICommandHandler {
      * @param {string} name - The name of the command
      * @returns {Promise<ICommand>}
      */
-    public async get(name: string): Promise<ICommand> {
-
-        const command = await this.commands.get(name);
-
-        if (!command) throw new Error(`Command: ${name} does not exist!`);
-
-        return command;
+    public async get(name: string): Promise<ICommand | undefined> {
+        return this.commands.get(name);
     }
 
     /**

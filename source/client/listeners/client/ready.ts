@@ -20,5 +20,14 @@ export default class ReadyEvent extends EventTemplate {
             name: 'Streaming: pornhub.com',
             type: ActivityType.Custom
         })
+
+        /**
+         * Loops over all cases hourly and
+         * expires them if their duration
+         * has passed.
+         */
+        setInterval(async () => {
+            await bot.db.case.check();
+        }, 60 * 60 * 1000)
     }
 }

@@ -27,7 +27,7 @@ export class DatabaseHandler {
         return {
 
             get: async (id: string, user: string) => {
-                const data = await this.prisma.cases.findMany({ where: { userId: user } });
+                const data = await this.prisma.cases.findMany({ where: { target: user } });
 
                 const res = data.find(c => c.id.startsWith(id));
 
@@ -39,7 +39,7 @@ export class DatabaseHandler {
                 }
             },
             list: async (user: string) => {
-                const data = await this.prisma.cases.findMany({ where: { userId: user } });
+                const data = await this.prisma.cases.findMany({ where: { target: user } });
 
                 if (!data || data.length === 0) return { state: false, message: 'No cases found for the provided user' };
 
@@ -48,73 +48,27 @@ export class DatabaseHandler {
                     data
                 }
             },
-            /**
-             * Create a new case
-             * @param {CreateStaffCase} data - The data to create a new case
-             * @returns {Promise<{ state: boolean, message: string, case?: cases }>}
-             */
-            create: async ({ userId, guild, type, action, reason, moderator, level, duration }: CreateStaffCase): Promise<ResponseStructure> => {
+            create: async ({ target, guild, state, level, reason, moderator, duration }: CreateStaffCase): Promise<ResponseStructure> => {
 
-                const required = { userId, guild, type, action, reason, moderator };
-                const missing = Object.entries(required).filter(([key, value]) => !value).map(([key]) => key);
-
-                if (missing.length > 0) {
-                    return {
-                        state: false,
-                        message: `Missing required fields: ${missing.join(', ')}`
-                    }
-                }
-
-                const user = await this.prisma.user.findUnique({ where: { id: userId } });
-
-                if (!user) {
-
-                    const fetch = await this.client.users.fetch(userId);
-                    if (!fetch) return { state: false, message: 'Failed to fetch user (this is a big oopsie)' };
-
-                    await this.user.create({
-                        id: fetch.id as string,
-                        name: fetch.globalName as string,
-                        avatar: fetch.avatarURL() as string,
-                        banned: false,
-                        total: 0
-                    })
-                }
-
-                const newCase = await this.prisma.cases.create({
-                    data: {
-                        guild,
-                        type,
-                        action,
-                        reason,
-                        moderator,
-                        duration,
-                        level,
-                        user: {
-                            connect: {
-                                id: userId
-                            }
-                        }
-                    }
+                const data = await this.prisma.cases.create({
+                    data: { target, guild, state, level, reason, moderator, duration }
                 }).catch((err: Error) => {
+                    this.logger.error('Failed to create a case:  ' + err.message);
+                    this.logger.debug('Stack trace: ' + err.stack);
 
-                    this.logger.error(`Failed to create case: ${err.message}`)
-                    this.logger.error(`Stack: ${err.stack}`)
+                    return { state: false, message: `Failed to create case: ${err.message}` }
+                });
 
-                    return {
-                        state: false,
-                        message: `Failed to create case: ${err.message}`
-                    }
-                })
+                if (!data) return { state: false, message: 'Failed to create case' };
 
                 return {
                     state: true,
-                    message: 'Case created successfully',
-                    case: newCase
+                    message: `Case created successfully for ${target} with the reason: ${reason}`,
+                    case: data
                 }
             },
             delete: async (id: string, user: string) => {
-                const data = await this.prisma.cases.findMany({ where: { userId: user } });
+                const data = await this.prisma.cases.findMany({ where: { target: user } });
 
                 const res = data.find(c => c.id.startsWith(id));
 
@@ -127,27 +81,30 @@ export class DatabaseHandler {
                     message: 'Case deleted successfully'
                 }
             },
-            /**
-             * Background task to expire a case
-             * @returns void
-             */
-            expire: async (): Promise<void> => {
-                const cases = await this.prisma.cases.findMany();
+            expire: async (id: string, user: string) => {
 
-                for (const c of cases) {
+                const c = await this.prisma.cases.findMany({ where: { target: user } });
+                const res = c.find(c => c.id.startsWith(id));
 
-                    if (c.duration !== null) {
-                        const created = new Date(c.createdAt);
-                        const duration = c.duration * 1000;
-                        const expires = new Date(created.getTime() + duration);
-                        const current = new Date()
+                if (!res || !c) return { state: false, message: 'Unable to locate a user case with that ID' };
 
-                        if (current > expires) {
-                            await this.prisma.cases.update({
-                                where: { id: c.id },
-                                data: { type: 'EXPIRED' }
-                            })
-                        }
+                if (res.duration && res.duration * 1000 < Date.now()) {
+                    await this.prisma.cases.update({ where: { id: res.id }, data: { state: 'EXPIRED' } });
+
+                    return { state: true, message: 'Case expired successfully' }
+                }
+
+                return { state: false, message: 'Case has not expired yet' }
+            },
+            check: async (): Promise<void> => {
+                const data = await this.prisma.cases.findMany({ where: { state: 'OPEN' } });
+                this.logger.info(`Checking ${data.length} cases for expiration`);
+
+                for (const res of data) {
+                    if (res.duration && res.duration * 1000 < Date.now()) {
+                        await this.prisma.cases.update({ where: { id: res.id }, data: { state: 'EXPIRED' } });
+
+                        this.logger.info(`Case ${res.id} has expired`);
                     }
                 }
             }
@@ -172,6 +129,14 @@ export class DatabaseHandler {
                         }
                     })
                 }
+            },
+            exists: async (id: string): Promise<boolean> => {
+
+                const data = await this.prisma.user.findUnique({ where: { id } });
+
+                if (!data) return false;
+
+                return true;
             }
         }
     }

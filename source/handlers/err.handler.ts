@@ -87,7 +87,7 @@ export class ErrorHandler {
     private async log({ id, name, type }: any): Promise<void> {
         try {
             await axios.post(process.env.ProxyURL as string, {
-                content: `<@!510065483693817867>`,
+                content: `<@&870950609317150732> <@&870950609291972625>`,
                 embeds: [
                     {
                         title: `Whoops, something went wrong!`,
@@ -105,6 +105,10 @@ export class ErrorHandler {
                             name: 'Error Type',
                             value: `${type}`,
                             inline: true
+                        }, {
+                            name: 'Important Info',
+                            value: `Use the ID above with my \`/error\` command to view or update this error.`,
+                            inline: false
                         }]
                     }
                 ]

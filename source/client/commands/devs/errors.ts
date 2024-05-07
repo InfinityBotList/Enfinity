@@ -12,11 +12,9 @@ export default class ErrorCommand extends CommandTemplate {
             category: 'devs',
             cooldown: 5,
             permissions: {
-                hr: false,
-                dev: false,
-                staff: false,
-                user: [],
-                bot: []
+                gate: ['lead_developer', 'developer'],
+                user: ['SendMessages', 'EmbedLinks', 'UseApplicationCommands'],
+                bot: ['SendMessages', 'EmbedLinks', 'UseApplicationCommands']
             },
             options: [{
                 name: 'view',

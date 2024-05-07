@@ -9,10 +9,9 @@ export interface ResponseStructure {
 
 export interface CreateStaffCase {
     id?: string;
-    userId: string;
+    target: string;
     guild: string;
-    type: cases['type'];
-    action: cases['action'];
+    state: cases['state'];
     reason: string;
     moderator: string;
     level: cases['level'];

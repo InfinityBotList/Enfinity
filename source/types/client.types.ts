@@ -9,7 +9,19 @@ export interface IConfig {
     }
     guild: {
         id: string;
-        logs: string;
+        channels: {
+            audits: '1237300039987101697';
+            errors: '1092343797582667826';
+            system: '1090417512862191676';
+        }
+        roles: {
+            management: '922837596063821835';
+            human_resources: '1223895841736101948';
+            lead_dev: '870950609317150732';
+            developer: '870950609291972625';
+            staff: '870950609291972622';
+            intern: '1227731480541921330';
+        }
     }
     colors: {
         base: HexColorString;
@@ -37,7 +49,7 @@ export interface IPermsConfig {
 export interface ICommandHandler {
     client: EnfinityClient;
     commands: Collection<string, CommandTypes.ICommand>
-    get(name: string): Promise<CommandTypes.ICommand>;
+    get(name: string): Promise<CommandTypes.ICommand | undefined>;
     all(): Collection<string, CommandTypes.ICommand>;
     category(category: string): Collection<string, CommandTypes.ICommand>;
     load(dir: string): void;

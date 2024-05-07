@@ -11,7 +11,6 @@ export default class SampleCommand extends CommandTemplate {
             category: 'some_category', // Replace this with the command category
             cooldown: 0, // Replace this with the command cooldown
             permissions: {
-                dev: false,
                 user: ['SendMessages'],
                 bot: ['SendMessages']
             }

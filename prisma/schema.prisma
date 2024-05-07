@@ -8,27 +8,23 @@ datasource db {
 }
 
 model user {
-    id     String  @id
-    name   String
-    avatar String
-    banned Boolean
-    total  Int     @default(0)
-    cases  cases[]
+    id        String  @id
+    name      String
+    avatar    String
+    banned    Boolean @default(false)
+    blacklist Boolean @default(false)
 }
 
 model cases {
-    id        String      @id @default(uuid())
+    id        String     @id @default(uuid())
     guild     String
-    type      CaseTypes   @default(USER_CASE)
-    action    CaseActions @default(WARN)
-    level     CaseLevel   @default(MINOR)
+    state     CaseStates @default(OPEN)
+    level     CaseLevel  @default(MINOR)
     reason    String
+    target    String
     moderator String
-    createdAt DateTime    @default(now())
+    createdAt DateTime   @default(now())
     duration  Int?
-
-    user   user?   @relation(fields: [userId], references: [id])
-    userId String?
 }
 
 model errors {
@@ -44,18 +40,9 @@ model errors {
     closedAt  DateTime?
 }
 
-enum CaseTypes {
-    USER_CASE
-    STAFF_CASE
+enum CaseStates {
+    OPEN
     EXPIRED
-}
-
-enum CaseActions {
-    BAN
-    KICK
-    MUTE
-    WARN
-    TIMEOUT
 }
 
 enum CaseLevel {

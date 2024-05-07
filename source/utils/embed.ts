@@ -6,6 +6,7 @@ export class MessageEmbed extends EmbedBuilder {
         title: string
         color: HexColorString
         description: string
+        thumbnail?: string
         fields: EmbedField[]
     }) {
         super();
@@ -13,7 +14,7 @@ export class MessageEmbed extends EmbedBuilder {
         this.setTitle(data.title);
         this.setDescription(data.description);
         data.color ? this.setColor(data.color) : this.setColor(config.colors.base);
-        this.setThumbnail('https://cdn.infinitybots.gg//core/enfinity.png');
+        data.thumbnail ? this.setThumbnail(data.thumbnail) : this.setThumbnail('https://cdn.infinitybots.gg//core/enfinity.png');
         data.fields ? this.setFields(data.fields) : null;
         this.setTimestamp();
         this.setFooter({

@@ -11,9 +11,6 @@ export default class PingCommand extends CommandTemplate {
             category: 'info',
             cooldown: 0,
             permissions: {
-                hr: false,
-                dev: false,
-                staff: false,
                 user: ['SendMessages'],
                 bot: ['SendMessages']
             }

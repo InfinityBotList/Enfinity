@@ -1,5 +1,6 @@
 import { EnfinityClient } from '../client/enfinity';
 import type { CacheType, ChatInputCommandInteraction } from "discord.js"
+import { Permissions } from "./perm.types";
 
 import type {
     ApplicationCommand,
@@ -36,9 +37,7 @@ export interface ICommandProps {
 }
 
 export interface ICommandPerms {
-    hr: boolean;
-    dev: boolean;
-    staff: boolean;
+    gate?: Permissions[];
     user: PermissionResolvable[];
     bot: PermissionResolvable[];
 }

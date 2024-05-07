@@ -16,6 +16,14 @@ export default class ReadyEvent extends EventTemplate {
 
         if (!command) return;
 
+        if (!await bot.db.user.exists(interaction.user.id)) await bot.db.user.create({
+            id: interaction.user.id,
+            name: interaction.user.globalName as string,
+            avatar: interaction.user.avatarURL() as string,
+            banned: false,
+            blacklist: false
+        })
+
         if (command.props.permissions?.user && !interaction.memberPermissions?.has(command.props.permissions.user)) {
             return interaction.reply({
                 ephemeral: true,
@@ -45,24 +53,44 @@ export default class ReadyEvent extends EventTemplate {
             }
         }
 
-        if (command.props.permissions?.dev) {
-            const dev = bot.guilds.cache.get(bot.config.guild.id)?.members.fetch(interaction.user.id);
-            const dev_role = '870950609291972625';
-            const lead_dev = '870950609317150732';
+        if (command.props.permissions?.gate) {
+            const validate = await bot.perms.user.validate({
+                user: interaction.user.id,
+                perm: command.props.permissions.gate
+            });
 
-            if (dev && !(await dev).roles.cache.has(lead_dev) || dev && !(await dev).roles.cache.has(dev_role)) {
+            if (!validate.success && !validate.state) {
                 return interaction.reply({
                     ephemeral: true,
                     embeds: [
                         new bot.MessageEmbed({
-                            title: 'Error: missing permissions',
-                            description: `Sorry chief, only my developers can use this command!`,
+                            title: 'Error: perm check failed',
+                            description: validate.message,
                             color: bot.config.colors.error
                         })
                     ]
                 })
             }
+
+            if (validate.state === 'lockdown') {
+                return interaction.reply({
+                    ephemeral: true,
+                    embeds: [
+                        new bot.MessageEmbed({
+                            title: 'Error: lockdown mode',
+                            description: validate.message,
+                            color: bot.config.colors.error,
+                            fields: [{
+                                name: 'Required Permissions',
+                                value: validate.missing,
+                                inline: false
+                            }]
+                        })
+                    ]
+                })
+            }
         }
+
 
         if (command.props.cooldown > 0) {
             if (!bot.cooldown.has(command.props.name)) {
