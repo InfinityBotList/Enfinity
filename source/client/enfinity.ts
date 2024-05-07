@@ -7,7 +7,8 @@ import { ErrorHandler } from '../handlers/err.handler';
 import { CommandHandler } from '../handlers/cmd.handler';
 import { EventHandler } from '../handlers/event.handler';
 import { DiscordAPI } from '../handlers/rest.handler';
-import { SpiderAPI } from '../handlers/perm.handler';
+import { Spider } from '../handlers/perm.handler';
+import { Utils } from '../utils/client';
 import { Logger } from '../utils/logger';
 import { config } from '../config/main';
 
@@ -21,8 +22,9 @@ export class EnfinityClient extends Client {
     public rest_api = new DiscordAPI(this);
     public commands = new CommandHandler(this);
     public events = new EventHandler(this);
-    public perms = new SpiderAPI(this);
     public db = new DatabaseHandler(this);
+    public perms = new Spider(this);
+    public utils = new Utils(this);
 
     public logger = new Logger('[CLIENT]');
     public types = ClientTypes;

@@ -1,6 +1,6 @@
 import { EnfinityClient } from '../client/enfinity';
 import type { CacheType, ChatInputCommandInteraction } from "discord.js"
-import { Permissions } from "./perm.types";
+import { Permissions } from "./spider/team.types";
 
 import type {
     ApplicationCommand,
